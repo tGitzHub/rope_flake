@@ -6,8 +6,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     nixgl.url = "github:nix-community/nixGL";
     rope-src = {
-      url = "github:helenginn/rope";
-      ref = "protons";
+      url = "github:helenginn/rope/protons";
       flake = false;
     };
   };
