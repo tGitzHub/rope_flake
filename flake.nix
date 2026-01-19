@@ -5,6 +5,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     nixgl.url = "github:nix-community/nixGL";
+    rope-src = {
+      url = "github:helenginn/rope";
+      ref = "protons";
+      flake = false;
+    };
   };
 
   outputs =
