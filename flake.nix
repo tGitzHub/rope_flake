@@ -11,7 +11,7 @@
   {
       self,
       nixpkgs,
-      flake-utils,
+    flake-utils,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -21,8 +21,8 @@
           let
             bn = builtins.baseNameOf path;
           in
-          # keep directories, but filter files by basename patterns
-          if type == "directory" then
+            # keep directories, but filter files by basename patterns
+            if type == "directory" then
             true
           else
             (
@@ -45,7 +45,12 @@
         # canonical candidate names for commonly required libs.
         coreDeps = depsByName [
           "cmake"
-          "boost" # Boost libraries
+          "pip"
+          "mesa-demos"
+          "boost" # BOBoost libraries
+          "mesa"
+          "python3"
+          "python3Packages.pip"
           "fftw" # FFTW
           "fftwFloat"
           "glew" # GLEW
@@ -144,7 +149,7 @@
             shellHook = ''
               echo "RoPE dev shell:"
               echo " - Meson, Ninja and pkg-config are available."
-              echo " - To configure: meson setup build .. --prefix=$out --buildtype=release"
+              echo " - To configure: meson setup build .. --prefix=$out --buildtype=debug"
               echo " - To build: ninja -C build"
             '';
           };
