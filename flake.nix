@@ -16,6 +16,8 @@
       self,
       nixpkgs,
       flake-utils,
+      nixgl,
+      rope-src,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -37,7 +39,7 @@
         ) ./.;
 
         pkgs = import nixpkgs { inherit system; };
-        lib = pkgs.lib;
+        inherit (pkgs) lib;
 
         # helper: check & fetch attribute from pkgs if present, otherwise null
         hasAttr = name: builtins.hasAttr name pkgs;
@@ -50,9 +52,7 @@
         coreDeps = depsByName [
           "cmake"
           "pip"
-          "mesa-demos"
           "boost" # BOBoost libraries
-          "mesa"
           "python3"
           "python3Packages.pip"
           "fftw" # FFTW
