@@ -4,14 +4,14 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    nixgl.url = "github:nix-community/nixGL";
   };
 
-
   outputs =
-  {
+    {
       self,
       nixpkgs,
-    flake-utils,
+      flake-utils,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -21,8 +21,8 @@
           let
             bn = builtins.baseNameOf path;
           in
-            # keep directories, but filter files by basename patterns
-            if type == "directory" then
+          # keep directories, but filter files by basename patterns
+          if type == "directory" then
             true
           else
             (
