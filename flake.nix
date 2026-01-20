@@ -50,7 +50,6 @@
 
         # canonical candidate names for commonly required libs.
         coreDeps = depsByName [
-          "cmake"
           "boost"
           "fftwFloat"
           "glew"
@@ -71,6 +70,7 @@
           pkgs.ninja
           pkgs.pkg-config
           pkgs.python3
+          pkgs.cmake
         ];
 
         src = rope-src; # set github src as source directory
