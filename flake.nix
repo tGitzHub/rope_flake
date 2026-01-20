@@ -49,7 +49,7 @@
         depsByName = nameList: lib.filter (x: x != null) (map getAttr nameList);
 
         # canonical candidate names for commonly required libs.
-        coreDeps = depsByName [
+        buildInputs = depsByName [
           "boost"
           "fftwFloat"
           "glew"
@@ -62,7 +62,7 @@
           "libjpeg"
           "zlib"
           "openssl"
-          "curlpp"
+          "curl"
         ];
 
         nativeBuildInputs = [
@@ -83,7 +83,7 @@
 
             inherit src;
             inherit nativeBuildInputs;
-            inherit coreDeps;
+            inherit buildInputs;
 
             # configure/build/install phases using Meson + Ninja
             configurePhase = ''
@@ -120,7 +120,7 @@
 
             inherit src;
             inherit nativeBuildInputs;
-            inherit coreDeps;
+            inherit buildInputs;
 
             # configure/build/install phases using Meson + Ninja
             configurePhase = ''
@@ -166,6 +166,14 @@
             type = "app";
             program = "${self.packages.${system}.rope_release}/bin/rope.gui";
           };
+          rope_cli_release = {
+            type = "app";
+            program = "${self.packages.${system}.rope_release}/bin/rope";
+          };
+          rope_gui_release = {
+            type = "app";
+            program = "${self.packages.${system}.rope_release}/bin/rope.gui";
+          };
           rope_cli_debug = {
             type = "app";
             program = "${self.packages.${system}.rope_debug}/bin/rope";
@@ -181,7 +189,7 @@
           default = pkgs.mkShell {
             buildInputs = lib.concatLists [
               nativeBuildInputs
-              coreDeps
+              buildInputs
             ];
 
             shellHook = ''
