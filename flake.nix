@@ -57,30 +57,14 @@
           rope_release = pkgs.stdenv.mkDerivation {
             pname = "rope";
             version = "release";
-
             inherit src;
             inherit nativeBuildInputs;
             inherit buildInputs;
 
-            # configure/build/install phases using Meson + Ninja
-            configurePhase = ''
-              echo "Configuring with Meson..."
-              # meson setup <builddir> <sourcedir> --prefix=$out <flags>
-              meson setup build . --prefix=$out --buildtype=release
-            '';
-
-            buildPhase = ''
-              echo "Building with ninja..."
-              ninja -C build
-            '';
-
-            installPhase = ''
-              echo "Installing..."
-              ninja -C build install
-            '';
-
-            # ensure no user-specific metadata is recorded
-            dontPatchELF = true;
+            mesonFlags = [
+              "--buildtype=release"
+              "-Dwarning_level=0"
+            ];
 
             # minimal metadata
             meta = with lib; {
@@ -99,25 +83,10 @@
             inherit nativeBuildInputs;
             inherit buildInputs;
 
-            # configure/build/install phases using Meson + Ninja
-            configurePhase = ''
-              echo "Configuring with Meson..."
-              # meson setup <builddir> <sourcedir> --prefix=$out <flags>
-              meson setup build . --prefix=$out --buildtype=debug
-            '';
-
-            buildPhase = ''
-              echo "Building with ninja..."
-              ninja -C build
-            '';
-
-            installPhase = ''
-              echo "Installing..."
-              ninja -C build install
-            '';
-
-            # ensure no user-specific metadata is recorded
-            dontPatchELF = true;
+            mesonFlags = [
+              "--buildtype=debug"
+              "-Dwarning_level=0"
+            ];
 
             # minimal metadata
             meta = with lib; {
