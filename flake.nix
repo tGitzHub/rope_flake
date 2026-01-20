@@ -66,11 +66,6 @@
           "curl"
         ];
 
-        # final buildInputs: combine core + optional wrapper
-        buildInputsFull = lib.concatLists [
-          coreDeps
-        ];
-
         nativeBuildInputs = [
           pkgs.meson
           pkgs.ninja
@@ -78,18 +73,17 @@
           pkgs.python3
         ];
 
-        src = filteredSrc; # repo root; works locally and when fetched from GitHub
+        src = rope-src; # set github src as source directory
       in
       {
         packages = {
-          rope = pkgs.stdenv.mkDerivation {
+          rope_release = pkgs.stdenv.mkDerivation {
             pname = "rope";
             version = "release";
 
-            src = src;
-
-            nativeBuildInputs = nativeBuildInputs;
-            buildInputs = buildInputsFull;
+            inherit src;
+            inherit nativeBuildInputs;
+            inherit coreDeps;
 
             # configure/build/install phases using Meson + Ninja
             configurePhase = ''
@@ -119,21 +113,66 @@
               platforms = platforms.linux;
             };
           };
+
+          rope_debug = pkgs.stdenv.mkDerivation {
+            pname = "rope";
+            version = "debug";
+
+            inherit src;
+            inherit nativeBuildInputs;
+            inherit coreDeps;
+
+            # configure/build/install phases using Meson + Ninja
+            configurePhase = ''
+              echo "Configuring with Meson..."
+              # meson setup <builddir> <sourcedir> --prefix=$out <flags>
+              meson setup build . --prefix=$out --buildtype=debug
+            '';
+
+            buildPhase = ''
+              echo "Building with ninja..."
+              ninja -C build
+            '';
+
+            installPhase = ''
+              echo "Installing..."
+              ninja -C build install
+            '';
+
+            # ensure no user-specific metadata is recorded
+            dontPatchELF = true;
+
+            # minimal metadata
+            meta = with lib; {
+              description = "RoPE: protein conformational-space analysis tools (helenginn/rope)";
+              homepage = "https://github.com/helenginn/rope";
+              license = licenses.gpl3;
+              platforms = platforms.linux;
+            };
+          };
         };
 
         # default package for `nix build .#`
-        defaultPackage = self.packages.${system}.rope;
+        defaultPackage = self.packages.${system}.rope_release;
 
         # optional app entry — adjust binary name if needed (inspect meson build for exact install name)
 
         apps = {
           rope_cli = {
             type = "app";
-            program = "${self.packages.${system}.rope}/bin/rope";
+            program = "${self.packages.${system}.rope_release}/bin/rope";
           };
           rope_gui = {
             type = "app";
-            program = "${self.packages.${system}.rope}/bin/rope.gui";
+            program = "${self.packages.${system}.rope_release}/bin/rope.gui";
+          };
+          rope_cli_debug = {
+            type = "app";
+            program = "${self.packages.${system}.rope_debug}/bin/rope";
+          };
+          rope_gui_debug = {
+            type = "app";
+            program = "${self.packages.${system}.rope_debug}/bin/rope.gui";
           };
         };
         defaultApp = self.apps.${system}.rope_gui;
