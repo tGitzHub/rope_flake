@@ -181,7 +181,7 @@
           default = pkgs.mkShell {
             buildInputs = lib.concatLists [
               nativeBuildInputs
-              buildInputsFull
+              coreDeps
             ];
 
             shellHook = ''
