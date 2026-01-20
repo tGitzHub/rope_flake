@@ -51,23 +51,18 @@
         # canonical candidate names for commonly required libs.
         coreDeps = depsByName [
           "cmake"
-          "pip"
-          "boost" # BOBoost libraries
-          "python3"
-          "python3Packages.pip"
-          "fftw" # FFTW
+          "boost"
           "fftwFloat"
-          "glew" # GLEW
-          "glm" # GLM
-          "SDL2" # SDL2
-          "SDL2_image" # SDL2_image
-          "nlohmann_json" # JSON for Modern C++
-          "gemmi" # gemmi library (if in nixpkgs)
-          "libpng" # PNG support
-          "libjpeg" # JPEG support (may be jpeg or libjpeg)
-          "zlib" # compression
-          "openssl" # TLS/crypto if required
-          "curlpp"
+          "glew"
+          "glm"
+          "SDL2"
+          "SDL2_image"
+          "nlohmann_json"
+          "gemmi"
+          "libpng"
+          "libjpeg"
+          "zlib"
+          "openssl"
           "curl"
         ];
 
