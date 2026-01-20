@@ -22,47 +22,24 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        filteredSrc = builtins.filterSource (
-          path: type:
-          let
-            bn = builtins.baseNameOf path;
-          in
-          # keep directories, but filter files by basename patterns
-          if type == "directory" then
-            true
-          else
-            (
-              # blacklist common noisy items; return true to KEEP the file, false to DROP it
-              (builtins.match "^(flake.nix|result|build|\\.git|node_modules|\\.direnv|\\.DS_Store)$" bn) == null
-              && (builtins.match ".*(~$|^\\.#|\\.swp$)$" bn) == null
-            )
-        ) ./.;
 
         pkgs = import nixpkgs { inherit system; };
         inherit (pkgs) lib;
 
-        # helper: check & fetch attribute from pkgs if present, otherwise null
-        hasAttr = name: builtins.hasAttr name pkgs;
-        getAttr = name: if hasAttr name then builtins.getAttr name pkgs else null;
-
-        # assemble dependency list by name (robust to slight name differences across pkgs commits)
-        depsByName = nameList: lib.filter (x: x != null) (map getAttr nameList);
-
-        # canonical candidate names for commonly required libs.
-        buildInputs = depsByName [
-          "boost"
-          "fftwFloat"
-          "glew"
-          "glm"
-          "SDL2"
-          "SDL2_image"
-          "nlohmann_json"
-          "gemmi"
-          "libpng"
-          "libjpeg"
-          "zlib"
-          "openssl"
-          "curl"
+        buildInputs = with pkgs; [
+          boost
+          fftwFloat
+          glew
+          glm
+          SDL2
+          SDL2_image
+          nlohmann_json
+          gemmi
+          libpng
+          libjpeg
+          zlib
+          openssl
+          curl
         ];
 
         nativeBuildInputs = [
