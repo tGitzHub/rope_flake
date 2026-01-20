@@ -62,7 +62,7 @@
           "libjpeg"
           "zlib"
           "openssl"
-          "curl"
+          "curlpp"
         ];
 
         nativeBuildInputs = [
