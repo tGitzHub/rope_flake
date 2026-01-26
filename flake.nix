@@ -13,6 +13,7 @@
 
   outputs =
     {
+      # comment
       self,
       nixpkgs,
       flake-utils,
